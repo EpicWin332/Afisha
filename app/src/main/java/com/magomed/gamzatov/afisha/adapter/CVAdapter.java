@@ -8,11 +8,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.magomed.gamzatov.afisha.R;
+import com.magomed.gamzatov.afisha.network.VolleySingleton;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CVAdapter extends RecyclerView.Adapter<CVAdapter.PersonViewHolder>{
+
+    private VolleySingleton volleySingleton;
+    private ImageLoader imageLoader;
+
     public static class PersonViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView personName;
@@ -31,6 +40,8 @@ public class CVAdapter extends RecyclerView.Adapter<CVAdapter.PersonViewHolder>{
 
     public CVAdapter(List<Person> persons){
         this.persons = persons;
+        volleySingleton = VolleySingleton.getsInstance();
+        imageLoader = volleySingleton.getImageLoader();
     }
 
     @Override
@@ -45,10 +56,22 @@ public class CVAdapter extends RecyclerView.Adapter<CVAdapter.PersonViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(PersonViewHolder holder, int position) {
+    public void onBindViewHolder(final PersonViewHolder holder, int position) {
         holder.personName.setText(persons.get(position).name);
         holder.personAge.setText(persons.get(position).age);
-        holder.personPhoto.setImageResource(persons.get(position).photoId);
+        String url = persons.get(position).photoUrl;
+
+        imageLoader.get(url, new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                holder.personPhoto.setImageBitmap(response.getBitmap());
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
     }
 
     @Override

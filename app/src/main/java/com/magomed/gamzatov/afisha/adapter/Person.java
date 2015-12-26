@@ -1,12 +1,14 @@
 package com.magomed.gamzatov.afisha.adapter;
 
+import android.graphics.Bitmap;
+
 public class Person {
     String name;
     String age;
-    int photoId;
-    public Person(String name, String age, int photoId) {
+    String photoUrl;
+    public Person(String name, String age, String photoUrl) {
         this.name = name;
         this.age = age;
-        this.photoId = photoId;
+        this.photoUrl = photoUrl;
     }
 }
