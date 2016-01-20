@@ -13,13 +13,10 @@ import com.android.volley.toolbox.ImageLoader;
 import com.magomed.gamzatov.afisha.R;
 import com.magomed.gamzatov.afisha.network.VolleySingleton;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class CVAdapter extends RecyclerView.Adapter<CVAdapter.PersonViewHolder>{
+public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
 
-    private VolleySingleton volleySingleton;
     private ImageLoader imageLoader;
 
     public static class PersonViewHolder extends RecyclerView.ViewHolder {
@@ -36,11 +33,11 @@ public class CVAdapter extends RecyclerView.Adapter<CVAdapter.PersonViewHolder>{
         }
     }
 
-    List<Person> persons;
+    List<Cinema> cinemas;
 
-    public CVAdapter(List<Person> persons){
-        this.persons = persons;
-        volleySingleton = VolleySingleton.getsInstance();
+    public RVAdapter(List<Cinema> cinemas){
+        this.cinemas = cinemas;
+        VolleySingleton volleySingleton = VolleySingleton.getsInstance();
         imageLoader = volleySingleton.getImageLoader();
     }
 
@@ -57,9 +54,9 @@ public class CVAdapter extends RecyclerView.Adapter<CVAdapter.PersonViewHolder>{
 
     @Override
     public void onBindViewHolder(final PersonViewHolder holder, int position) {
-        holder.personName.setText(persons.get(position).name);
-        holder.personAge.setText(persons.get(position).age);
-        String url = persons.get(position).photoUrl;
+        holder.personName.setText(cinemas.get(position).name);
+        holder.personAge.setText(cinemas.get(position).age);
+        String url = cinemas.get(position).photoUrl;
 
         imageLoader.get(url, new ImageLoader.ImageListener() {
             @Override
@@ -76,7 +73,7 @@ public class CVAdapter extends RecyclerView.Adapter<CVAdapter.PersonViewHolder>{
 
     @Override
     public int getItemCount() {
-        return persons.size();
+        return cinemas.size();
     }
 }
 

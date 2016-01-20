@@ -17,8 +17,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.magomed.gamzatov.afisha.R;
-import com.magomed.gamzatov.afisha.adapter.RVAdapter;
 import com.magomed.gamzatov.afisha.adapter.Cinema;
+import com.magomed.gamzatov.afisha.adapter.RVAdapter;
+import com.magomed.gamzatov.afisha.adapter.RVSessionsAdapter;
+import com.magomed.gamzatov.afisha.adapter.Sessions;
 import com.magomed.gamzatov.afisha.network.VolleySingleton;
 
 import org.jsoup.Jsoup;
@@ -29,18 +31,18 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CinemasFragment extends AbstractTabFragment{
+public class SessionsFragment extends AbstractTabFragment{
 
-    private static final int LAYOUT = R.layout.fragment_cinemas;
+    private static final int LAYOUT = R.layout.fragment_sessions;
 
-    private List<Cinema> cinemas = new ArrayList<>();
-    
-    public static CinemasFragment getInstance(Context context) {
+    private List<Sessions> sessions = new ArrayList<>();
+
+    public static SessionsFragment getInstance(Context context) {
         Bundle args = new Bundle();
-        CinemasFragment fragment = new CinemasFragment();
+        SessionsFragment fragment = new SessionsFragment();
         fragment.setArguments(args);
         fragment.setContext(context);
-        fragment.setTitle(context.getString(R.string.tab_item_cinemas));
+        fragment.setTitle(context.getString(R.string.tab_item_sessions));
         return fragment;
     }
 
@@ -49,7 +51,7 @@ public class CinemasFragment extends AbstractTabFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(LAYOUT, container, false);
 
-        String url = "http://www.interdag.ru/afisha/movies";
+        String url = "http://www.interdag.ru/afisha/seans";
 
         final RecyclerView rv = (RecyclerView) view.findViewById(R.id.rv);
         LinearLayoutManager llm = new LinearLayoutManager(context);
@@ -60,7 +62,7 @@ public class CinemasFragment extends AbstractTabFragment{
             @Override
             public void onResponse(String response) {
                 htmlParser(response);
-                RVAdapter adapter = new RVAdapter(cinemas);
+                RVSessionsAdapter adapter = new RVSessionsAdapter(sessions);
                 rv.setAdapter(adapter);
             }
         }, new Response.ErrorListener() {
@@ -71,19 +73,20 @@ public class CinemasFragment extends AbstractTabFragment{
         });
         requestQueue.add(stringRequest);
 
-
         return view;
     }
 
     private void htmlParser(String response) {
         Document doc = Jsoup.parse(response);
-        Elements elements = doc.getElementsByClass("div100");
-        cinemas.clear();
+        Elements elements = doc.getElementsByClass("even");
+        sessions.clear();
+        elements.remove(0);
         for (Element element: elements) {
-            String imageUrl = element.getElementsByTag("a").get(0).getElementsByTag("img").get(0).attr("src");
-            String cinemaName = element.getElementsByTag("h2").get(0).getElementsByTag("a").get(0).text();
-            Log.d("taggggggsdgsgasgsggggg", cinemaName + " " + imageUrl);
-            cinemas.add(new Cinema(cinemaName, imageUrl, "http://www.interdag.ru"+imageUrl));
+            String time = element.getElementsByTag("td").get(0).text();
+            String cinema = element.getElementsByTag("td").get(1).getElementsByTag("a").get(0).text();
+            String theatre = element.getElementsByTag("td").get(2).getElementsByTag("a").get(0).text();
+            Log.d("taggggggsdgsgasgsggggg", time + " " + cinema + " " + theatre);
+            sessions.add(new Sessions(time, cinema, theatre));
         }
     }
 

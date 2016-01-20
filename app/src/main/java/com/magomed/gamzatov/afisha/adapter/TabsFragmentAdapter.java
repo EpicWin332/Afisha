@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.magomed.gamzatov.afisha.fragment.AbstractTabFragment;
 import com.magomed.gamzatov.afisha.fragment.CinemasFragment;
-import com.magomed.gamzatov.afisha.fragment.SeeNowFragment;
+import com.magomed.gamzatov.afisha.fragment.SessionsFragment;
 import com.magomed.gamzatov.afisha.fragment.TheatresFragment;
 
 import java.util.HashMap;
@@ -40,8 +40,7 @@ public class TabsFragmentAdapter extends FragmentPagerAdapter {
     private void initTabsMap(Context context) {
         tabs = new HashMap<>();
         tabs.put(0, CinemasFragment.getInstance(context));
-        tabs.put(1, SeeNowFragment.getInstance(context));
-        tabs.put(2, TheatresFragment.getInstance(context));
-//        tabs.put(3, BirthdaysFragment.getInstance(context));
+        tabs.put(1, TheatresFragment.getInstance(context));
+        tabs.put(2, SessionsFragment.getInstance(context));
     }
 }
